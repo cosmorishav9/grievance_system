@@ -1,8 +1,21 @@
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory, flash
 import os
 from werkzeug.utils import secure_filename
+from flask_mail import Mail, Message
 
 app = Flask(__name__)
+
+# Flask-Mail setup
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = 'rishavmitra187@gmail.com'  # Replace with your Gmail address
+app.config['MAIL_PASSWORD'] = 'wlkp wceo rhtx txwp'  # Replace with your Gmail App Password
+app.config['MAIL_DEFAULT_SENDER'] = 'rishavmitra187@gmail.com'  # Same as the username
+
+mail = Mail(app)
+
+# Configurations for file uploads
 app.config['UPLOAD_FOLDER'] = 'uploads/'  # Folder to store uploaded files
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # Max upload size (16MB)
 app.secret_key = 'your_secret_key_here'
@@ -25,6 +38,26 @@ chatbot_responses = {
 def allowed_file(filename):
     """Check if the uploaded file has an allowed extension."""
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+def send_grievance_notification(email, title):
+    """Send email notification to the user after submitting a grievance."""
+    try:
+        msg = Message("Grievance Submitted Successfully", recipients=[email])
+        msg.body = f"Dear user,\n\nYour grievance titled '{title}' has been successfully submitted. We will review it and get back to you shortly.\n\nThank you for using our grievance redressal system."
+        mail.send(msg)
+    except Exception as e:
+        print(f"Error sending email: {e}")
+        flash(f"An error occurred while sending the email: {e}")
+
+def send_resolution_notification(email, title):
+    """Send email notification to the user when the grievance is resolved."""
+    try:
+        msg = Message("Grievance Resolved", recipients=[email])
+        msg.body = f"Dear user,\n\nYour grievance titled '{title}' has been resolved. Thank you for your patience.\n\nBest regards,\nGrievance Redressal Team"
+        mail.send(msg)
+    except Exception as e:
+        print(f"Error sending email: {e}")
+        flash(f"An error occurred while sending the resolution email: {e}")
 
 @app.route('/')
 def index():
@@ -69,6 +102,8 @@ def admin_dashboard():
         for grievance in grievances:
             if grievance['id'] == grievance_id:
                 grievance['resolved'] = True
+                # Send notification to the user when the grievance is resolved
+                send_resolution_notification(grievance['email'], grievance['title'])
                 break
         return redirect(url_for('admin_dashboard'))
     
@@ -107,6 +142,9 @@ def add_grievance():
             'resolved': False
         })
         
+        # Send email notification
+        send_grievance_notification(email, title)
+
         return redirect(url_for('submission_success'))
     
     return render_template('add_grievance.html')
@@ -138,3 +176,4 @@ def user_feedback_success():
 if __name__ == '__main__':
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)  # Create upload folder if it doesn't exist
     app.run(debug=True)
+
