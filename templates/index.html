@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grievance Redressal System</title>
+    <style>
+        /* General Reset and Box-Sizing */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ece9e6, #ffffff);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 0 10px;
+            transition: all 0.3s ease;
+        }
+
+        .container {
+            width: 85%;
+            margin: 0 auto;
+            padding: 40px;
+            text-align: center;
+        }
+
+        /* Header Section */
+        header {
+            background: linear-gradient(135deg, #4CAF50, #388E3C);
+            color: white;
+            padding: 50px 30px;
+            border-radius: 15px;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+            margin-bottom: 50px;
+            position: relative;
+            overflow: hidden;
+            transform: translateY(30px);
+            animation: slideIn 1s ease-out, containerGlow 3s ease-in-out infinite;
+        }
+
+        header:before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            animation: ripple 1.5s ease-out infinite;
+        }
+
+        header:hover {
+            transform: translateY(10px);
+        }
+
+        header h1 {
+            font-size: 48px;
+            margin-bottom: 15px;
+            letter-spacing: 1.5px;
+            text-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        header p {
+            font-size: 22px;
+            font-weight: 300;
+            opacity: 0.9;
+        }
+
+        /* Navigation Styling */
+        nav {
+            margin-bottom: 50px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 35px;
+            flex-wrap: wrap;
+        }
+
+        nav ul li {
+            display: inline-block;
+        }
+
+        .nav-btn {
+            display: inline-block;
+            background-color: #FF5722;
+            color: white;
+            font-size: 20px;
+            padding: 18px 40px;
+            text-decoration: none;
+            border-radius: 8px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            animation: buttonGlow 3s ease-in-out infinite;
+        }
+
+        .nav-btn:before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            animation: ripple 1.2s ease-out infinite;
+        }
+
+        .nav-btn:hover {
+            background-color: #FF7043;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+            transform: translateY(-5px);
+        }
+
+        /* Footer Styling */
+        footer {
+            background-color: #263238;
+            color: white;
+            padding: 20px;
+            font-size: 14px;
+            border-radius: 10px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: all 0.3s ease;
+            margin-top: 100px;
+            animation: footerGlow 3s ease-in-out infinite;
+        }
+
+        footer:hover {
+            background-color: #37474F;
+            transform: translateY(-5px);
+        }
+
+        footer p {
+            font-weight: 300;
+        }
+
+        /* Animations */
+        @keyframes slideIn {
+            0% {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes ripple {
+            0% {
+                transform: translate(-50%, -50%) scale(0);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0;
+            }
+        }
+
+        @keyframes containerGlow {
+            0%,
+            100% {
+                box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1), 0 0 15px rgba(76, 175, 80, 0.4);
+            }
+
+            50% {
+                box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1), 0 0 25px rgba(76, 175, 80, 0.7);
+            }
+        }
+
+        @keyframes buttonGlow {
+            0%,
+            100% {
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1), 0 0 10px rgba(255, 87, 34, 0.4);
+            }
+
+            50% {
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1), 0 0 20px rgba(255, 87, 34, 0.7);
+            }
+        }
+
+        @keyframes footerGlow {
+            0%,
+            100% {
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1), 0 0 10px rgba(255, 255, 255, 0.3);
+            }
+
+            50% {
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1), 0 0 20px rgba(255, 255, 255, 0.5);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 38px;
+            }
+
+            header p {
+                font-size: 18px;
+            }
+
+            .nav-btn {
+                padding: 15px 30px;
+                font-size: 18px;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 28px;
+            }
+
+            .nav-btn {
+                padding: 14px 25px;
+                font-size: 16px;
+            }
+
+            footer p {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <header>
+            <h1>Welcome to the Online Grievance Redressal System</h1>
+            <p>Your voice matters. Submit your grievances and let us help you resolve them efficiently.</p>
+        </header>
+
+        <!-- Navigation Links -->
+        <nav>
+            <ul>
+                <li><a href="/login" class="nav-btn">Admin Login</a></li>
+                <li><a href="/add_grievance" class="nav-btn">Add a Grievance</a></li>
+                <li><a href="/user_feedback" class="nav-btn">User Feedback</a></li>
+                <li><a href="/chat" class="nav-btn">Chatbot Assistance</a></li> <!-- Chatbot Button -->
+            </ul>
+        </nav>
+
+        <!-- Footer Section -->
+        <footer>
+            <p>&copy; 2024 Grievance Redressal System. All Rights Reserved.</p>
+        </footer>
+    </div>
+</body>
+
+</html>

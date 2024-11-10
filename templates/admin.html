@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        /* General Reset and Box-Sizing */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .admin-dashboard {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            margin: 20px;
+            max-width: 1000px;
+            transition: transform 0.3s ease;
+            animation: containerGlow 3s ease-in-out infinite;
+        }
+
+        .admin-dashboard:hover {
+            transform: translateY(-5px);
+        }
+
+        .admin-dashboard h2 {
+            text-align: center;
+            font-size: 32px;
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+
+        .admin-dashboard h3 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table th, table td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        table th {
+            background-color: #f2f2f2;
+            color: #333;
+        }
+
+        table tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .action-btn, .back-btn {
+            padding: 8px 15px;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            animation: buttonGlow 3s ease-in-out infinite;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .action-btn {
+            background-color: #4CAF50;
+        }
+
+        .action-btn:hover {
+            background-color: #45a049;
+            transform: translateY(-3px);
+        }
+
+        .back-btn {
+            background-color: #2196F3;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .back-btn:hover {
+            background-color: #0b7dda;
+            transform: translateY(-3px);
+        }
+
+        /* Styling for Attachment Image Thumbnail */
+        .attachment-img {
+            width: 100px;
+            height: 100px;
+            border-radius: 8px;
+            object-fit: cover;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Keyframes for Glow Effect */
+        @keyframes containerGlow {
+            0%, 100% {
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1), 0 0 15px rgba(76, 175, 80, 0.4);
+            }
+            50% {
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1), 0 0 25px rgba(76, 175, 80, 0.7);
+            }
+        }
+
+        @keyframes buttonGlow {
+            0%, 100% {
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 0 10px rgba(33, 150, 243, 0.4);
+            }
+            50% {
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 0 20px rgba(33, 150, 243, 0.7);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-dashboard">
+        <h2>Admin Dashboard</h2>
+        
+        <h3>Total Grievances: {{ total_grievances }}</h3>
+        <h3>Resolved Grievances: {{ resolved_grievances }}</h3>
+
+        <h3>Grievance List</h3>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Email</th>
+                    <th>Attachment</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for grievance in grievances %}
+                    <tr>
+                        <td>{{ grievance['title'] }}</td>
+                        <td>{{ grievance['description'] }}</td>
+                        <td>{{ grievance['email'] }}</td>
+                        <td>
+                            {% if grievance['attachment'] %}
+                                <img src="{{ url_for('uploaded_file', filename=grievance['attachment'].split('/')[-1]) }}" 
+                                     alt="Attachment" class="attachment-img">
+                            {% else %}
+                                No Attachment
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if grievance['resolved'] %}
+                                <span style="color: green;">Resolved</span>
+                            {% else %}
+                                <span style="color: red;">Pending</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if not grievance['resolved'] %}
+                                <form action="/admin" method="POST" style="display:inline;">
+                                    <input type="hidden" name="grievance_id" value="{{ grievance['id'] }}">
+                                    <button type="submit" class="action-btn">Resolve</button>
+                                </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="6">No grievances submitted yet.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <a href="/" class="back-btn">Back to Home</a>
+    </div>
+</body>
+</html>

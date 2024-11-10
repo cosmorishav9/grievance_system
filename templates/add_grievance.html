@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Grievance</title>
+    <style>
+        /* General Reset and Box-Sizing */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f0f4f8, #ffffff);
+            color: #333;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .grievance-container {
+            background: #ffffff;
+            width: 100%;
+            max-width: 800px;
+            padding: 40px 60px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease-in-out;
+            transform: translateY(30px);
+            animation: glow 3s ease-in-out infinite;
+        }
+
+        .grievance-container:hover {
+            transform: translateY(0px);
+        }
+
+        h2 {
+            font-size: 36px;
+            color: #4CAF50;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        label {
+            font-size: 16px;
+            color: #444;
+            margin: 10px 0;
+            text-align: left;
+            display: block;
+            font-weight: 500;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        input:focus, textarea:focus {
+            border: 1px solid #4CAF50;
+            outline: none;
+            box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
+        }
+
+        textarea {
+            height: 150px;
+            resize: vertical;
+        }
+
+        button {
+            background: linear-gradient(135deg, #FF5722, #FF7043);
+            color: white;
+            padding: 14px 30px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            animation: buttonGlow 3s ease-in-out infinite;
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #FF7043, #FF5722);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Keyframes for blooming (glow) effect */
+        @keyframes glow {
+            0%, 100% {
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1), 0 0 15px rgba(76, 175, 80, 0.4);
+            }
+            50% {
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1), 0 0 25px rgba(76, 175, 80, 0.7);
+            }
+        }
+
+        @keyframes buttonGlow {
+            0%, 100% {
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1), 0 0 10px rgba(255, 87, 34, 0.4);
+            }
+            50% {
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1), 0 0 20px rgba(255, 87, 34, 0.7);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .grievance-container {
+                padding: 30px;
+            }
+
+            h2 {
+                font-size: 28px;
+            }
+
+            input, textarea, button {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="grievance-container">
+        <h2>Submit a Grievance</h2>
+        
+        <!-- Grievance submission form -->
+        <form action="/add_grievance" method="POST" enctype="multipart/form-data">
+            <label for="grievance_title">Grievance Title:</label>
+            <input type="text" id="grievance_title" name="grievance_title" required>
+
+            <label for="grievance_description">Grievance Description:</label>
+            <textarea id="grievance_description" name="grievance_description" required></textarea>
+
+            <label for="email">Your Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <!-- File upload input -->
+            <label for="attachment">Upload Supporting Document (Optional):</label>
+            <input type="file" id="attachment" name="attachment" accept=".jpg, .jpeg, .png, .pdf, .doc, .docx">
+
+            <button type="submit">Submit Grievance</button>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot Assistance</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: #f5f5f5;
+            margin: 0;
+        }
+
+        .chat-container {
+            width: 100%;
+            max-width: 450px;
+            background: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            animation: glowEffect 3s ease-in-out infinite; /* Glowing animation */
+        }
+
+        /* Glowing Effect for the Chatbot Box */
+        @keyframes glowEffect {
+            0% {
+                box-shadow: 0 0 10px rgba(0, 255, 0, 0.5), 0 0 20px rgba(0, 255, 0, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 20px rgba(0, 255, 0, 1), 0 0 30px rgba(0, 255, 0, 0.7);
+            }
+            100% {
+                box-shadow: 0 0 10px rgba(0, 255, 0, 0.5), 0 0 20px rgba(0, 255, 0, 0.5);
+            }
+        }
+
+        .chat-header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .chat-box {
+            padding: 15px;
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 400px;
+        }
+
+        .user-message, .bot-message {
+            padding: 10px 15px;
+            border-radius: 15px;
+            max-width: 75%;
+            word-wrap: break-word;
+        }
+
+        .user-message {
+            align-self: flex-end;
+            background-color: #FF5722;
+            color: white;
+        }
+
+        .bot-message {
+            align-self: flex-start;
+            background-color: #e0e0e0;
+            color: #333;
+        }
+
+        .chat-input {
+            display: flex;
+            border-top: 1px solid #ddd;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 0;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .chat-input button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+        .chat-input button:hover {
+            background-color: #388E3C;
+        }
+
+        /* Back to Home Box */
+        .home-box {
+            padding: 20px;
+            background-color: #FF5722;
+            color: white;
+            text-align: center;
+            font-size: 18px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .home-box a {
+            text-decoration: none;
+            color: white;
+            font-size: 16px;
+            padding: 10px 20px;
+            background-color: #E64A19;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .home-box a:hover {
+            background-color: #D84315;
+        }
+
+        /* Responsiveness */
+        @media (max-width: 500px) {
+            .chat-container {
+                max-width: 90%;
+            }
+
+            .chat-header {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="chat-container">
+    <div class="chat-header">
+        Chatbot Assistance
+    </div>
+
+    <div class="chat-box" id="chat-box">
+        <!-- Messages will appear here -->
+    </div>
+
+    <div class="chat-input">
+        <input type="text" id="user-input" placeholder="Type your question here..." />
+        <button onclick="handleUserMessage()">Send</button>
+    </div>
+
+    <!-- Back to Home Button Box -->
+    <div class="home-box">
+        <a href="/">Back to Home</a>
+    </div>
+</div>
+
+<script>
+    // Predefined responses for common issues
+    const responses = {
+        "how do i submit a grievance": "To submit a grievance, go to the 'Add a Grievance' page, fill in the required details, and submit it. If you're unable to do this yourself, you can report it directly here.",
+        "how can i check my grievance status": "You can check your grievance status by logging into your user account and navigating to the dashboard. If you need assistance, please report it through the grievance system.",
+        "i forgot my password": "Please use the 'Forgot Password' option on the login page to reset your password. If you're unable to reset it, you can report the issue to us.",
+        "how do i contact support": "For further assistance, please email our support team at support@example.com, or you can report the issue through the grievance system.",
+        "water leakage problem": "For water leakage issues, try to identify the source and check if you can fix it yourself. If not, please report it through the grievance system for further assistance.",
+        "road construction problem": "If there are issues with road construction, please report it to the relevant local authorities. You can also submit a grievance if you're facing disruption.",
+        "electronics problem": "For electronics-related issues, check the device's manual or troubleshoot common issues. If the problem persists, report it through the grievance system.",
+        "road lights not working": "If you notice that road lights are not functioning, check with the local municipal authorities. If it's not resolved, report it through the grievance system.",
+        "data loss": "If you've experienced data loss, attempt recovery from any backup you might have. If this is not possible, you can report the issue through the grievance system for further help.",
+        "corruption": "If you are facing corruption-related issues, report it to the appropriate authorities or submit a grievance to us, and we will escalate it.",
+        "workplace harassment": "If you're experiencing workplace harassment, it's important to document the incidents and report them to HR or the concerned authority. You can also report it through the grievance system if needed.",
+        "bullying": "Bullying should be reported immediately. If you're unable to resolve it internally, please submit a grievance to us for further action.",
+        "parking problem": "For parking issues, check if alternative spaces are available or contact the parking management. If the issue persists, please report it through the grievance system.",
+        "food problem": "If you're having issues with food quality or hygiene, report it directly to the food service provider. If unresolved, you can report the grievance to us.",
+        "fraud": "If you've encountered fraud, report it to the authorities immediately. If you need further assistance, contact customer support or file a grievance.",
+        "scam": "In case of a scam, report it to the appropriate authorities. If you need assistance or want to escalate the issue, file a grievance through the system.",
+        "default": "I'm sorry, I didn't understand that. Could you please rephrase? Or if it's an issue, feel free to report it via the grievance system."
+    };
+
+    // Function to handle user message
+    function handleUserMessage() {
+        const userInput = document.getElementById('user-input').value.trim().toLowerCase();
+        if (!userInput) return; // Don't send empty messages
+
+        displayMessage(userInput, 'user');
+
+        // Get the bot's response
+        const botResponse = responses[userInput] || responses["default"];
+        setTimeout(() => displayMessage(botResponse, 'bot'), 500);
+
+        // Clear input field
+        document.getElementById('user-input').value = '';
+    }
+
+    // Function to display messages in the chatbox
+    function displayMessage(message, type) {
+        const messageContainer = document.createElement('div');
+        messageContainer.classList.add(type === 'user' ? 'user-message' : 'bot-message');
+        messageContainer.textContent = message;
+        document.getElementById('chat-box').appendChild(messageContainer);
+        document.getElementById('chat-box').scrollTop = document.getElementById('chat-box').scrollHeight;
+    }
+
+    // Allow user to send message using Enter key
+    document.getElementById('user-input').addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            handleUserMessage();
+        }
+    });
+</script>
+
+</body>
+</html>
